@@ -15,6 +15,7 @@
 {$SERVER_NAME:localhost} {
 	root * /app/public
 	encode zstd br gzip
+	{$CADDY_SERVER_EXTRA_DIRECTIVES}
 
 	header {
 		-Server
@@ -65,8 +66,6 @@
 			path_regexp woltlabRoot ^/(.*)$
 		}
 		rewrite @woltlabRootRewrite /index.php?{re.woltlabRoot.1}
-
-		{$CADDY_SERVER_EXTRA_DIRECTIVES}
 
 		php_server
 	}

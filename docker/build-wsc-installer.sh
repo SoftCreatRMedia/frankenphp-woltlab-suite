@@ -35,7 +35,7 @@ fi
 if [ -d "$work_dir/src/com.woltlab.wcf/templates" ]; then
 	(
 		cd "$work_dir/src/com.woltlab.wcf/templates"
-		tar -cf "$work_dir/src/com.woltlab.wcf/templates.tar" .
+		tar -cf "$work_dir/src/com.woltlab.wcf/templates.tar" *
 	)
 	rm -rf "$work_dir/src/com.woltlab.wcf/templates"
 fi
@@ -47,7 +47,7 @@ fi
 
 (
 	cd "$work_dir/src/wcfsetup"
-	tar -czf "$output_dir/WCFSetup.tar.gz" install setup install.php test.php
+	tar -czf "$output_dir/WCFSetup.tar.gz" *
 )
 
 cp "$work_dir/src/wcfsetup/install.php" "$output_dir/install.php"
