@@ -266,8 +266,6 @@ The bundled Caddyfile:
 
 Worker mode is not enabled. WoltLab Suite has not been audited for a persistent PHP worker lifecycle, and classic request isolation is the safer production default.
 
-See [docs/security.md](docs/security.md) and [docs/production-checklist.md](docs/production-checklist.md) before running a public community.
-
 ## Backups
 
 Create a database, application volume, and generated-secrets backup:

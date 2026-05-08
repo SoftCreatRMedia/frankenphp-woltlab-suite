@@ -40,11 +40,6 @@ if [ -d "$work_dir/src/com.woltlab.wcf/templates" ]; then
 	rm -rf "$work_dir/src/com.woltlab.wcf/templates"
 fi
 
-options_file="$work_dir/src/com.woltlab.wcf/options.inc.php"
-if [ -f "$options_file" ] && ! grep -q "INTERNAL_HOSTNAMES" "$options_file"; then
-	sed -i "/define('URL_OMIT_INDEX_PHP'/a \\\\define('INTERNAL_HOSTNAMES', '');" "$options_file"
-fi
-
 (
 	cd "$work_dir/src/com.woltlab.wcf"
 	tar -cf "$work_dir/src/wcfsetup/install/packages/com.woltlab.wcf.tar" *
