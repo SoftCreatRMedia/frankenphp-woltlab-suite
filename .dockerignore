@@ -1,0 +1,11 @@
+.git
+.github
+docs
+manual
+*.md
+.env
+.env.*
+!.env.example
+docker-compose*.yml
+compose*.yaml
+docker-bake.hcl

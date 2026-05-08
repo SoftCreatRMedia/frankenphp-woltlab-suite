@@ -1,0 +1,28 @@
+services:
+  certbot-cert-init:
+    image: alpine:3.22
+    restart: "no"
+    environment:
+      CERTBOT_CERT_NAME: "${CERTBOT_CERT_NAME:?Set CERTBOT_CERT_NAME to the certificate directory below /etc/letsencrypt/live}"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - caddy-certs:/certs
+    command:
+      - sh
+      - -c
+      - |
+        set -eu
+        cp "/etc/letsencrypt/live/$${CERTBOT_CERT_NAME}/fullchain.pem" /certs/fullchain.pem
+        cp "/etc/letsencrypt/live/$${CERTBOT_CERT_NAME}/privkey.pem" /certs/privkey.pem
+        chown 33:33 /certs/fullchain.pem /certs/privkey.pem
+        chmod 400 /certs/fullchain.pem /certs/privkey.pem
+
+  wsc:
+    depends_on:
+      certbot-cert-init:
+        condition: service_completed_successfully
+    volumes:
+      - caddy-certs:/certs:ro
+
+volumes:
+  caddy-certs:

@@ -1,0 +1,4 @@
+services:
+  wsc:
+    build: !reset null
+    image: "${WSC_PREBUILT_IMAGE:-ghcr.io/softcreatrmedia/frankenphp-woltlab-suite}:${WSC_TAG:-6.2-php8.4}"

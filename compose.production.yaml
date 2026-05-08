@@ -1,0 +1,22 @@
+services:
+  wsc:
+    user: "33:33"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=256m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    volumes:
+      - wsc-public:/app/public:rw
+      - caddy-data:/data:rw
+      - caddy-config:/config:rw
+
+  db:
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=256m
