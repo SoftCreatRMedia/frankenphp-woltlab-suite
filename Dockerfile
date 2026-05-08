@@ -29,7 +29,7 @@ FROM dunglas/frankenphp:1-php${PHP_VERSION}-${DEBIAN_VERSION}
 ARG WSC_REF
 
 LABEL org.opencontainers.image.title="WoltLab Suite on FrankenPHP"
-LABEL org.opencontainers.image.description="Production-oriented FrankenPHP/Caddy runtime for WoltLab Suite Core"
+LABEL org.opencontainers.image.description="Production-ready FrankenPHP/Caddy runtime for WoltLab Suite Core"
 LABEL org.opencontainers.image.source="https://github.com/SoftCreatRMedia/frankenphp-woltlab-suite"
 LABEL org.opencontainers.image.licenses="ISC"
 
@@ -39,6 +39,7 @@ ENV WSC_REF="${WSC_REF}" \
     PHP_UPLOAD_MAX_FILESIZE="64M" \
     PHP_POST_MAX_SIZE="64M" \
     PHP_MAX_EXECUTION_TIME="120" \
+    PHP_DISABLE_FUNCTIONS="exec,passthru,shell_exec,system,proc_open,popen" \
     PHP_OPCACHE_MEMORY_CONSUMPTION="256" \
     PHP_OPCACHE_INTERNED_STRINGS_BUFFER="32" \
     PHP_OPCACHE_MAX_ACCELERATED_FILES="20000" \
@@ -74,12 +75,14 @@ COPY --from=wsc_builder --chown=www-data:www-data /usr/src/woltlab /usr/src/wolt
 RUN set -eux; \
     chmod +x /usr/local/bin/wsc-entrypoint; \
     find /app/public -mindepth 1 -maxdepth 1 -exec rm -rf {} +; \
-    mkdir -p /app/public; \
-    chown -R www-data:www-data /app
+    mkdir -p /app/public /data /config; \
+    chown -R www-data:www-data /app /data /config
 
 WORKDIR /app/public
 
 VOLUME ["/app/public", "/data", "/config"]
+
+USER www-data
 
 ENTRYPOINT ["wsc-entrypoint"]
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]

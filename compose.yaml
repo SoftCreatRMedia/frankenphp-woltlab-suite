@@ -29,6 +29,17 @@ services:
         WSC_REF: "${WSC_REF:-6.2.3}"
     image: "${WSC_IMAGE:-frankenphp-woltlab-suite}:${WSC_TAG:-6.2-php8.4}"
     restart: unless-stopped
+    init: true
+    user: "33:33"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=256m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
     environment:
       SERVER_NAME: "${SERVER_NAME:-localhost}"
       WSC_REF: "${WSC_REF:-6.2.3}"
@@ -40,6 +51,7 @@ services:
       PHP_UPLOAD_MAX_FILESIZE: "${PHP_UPLOAD_MAX_FILESIZE:-64M}"
       PHP_POST_MAX_SIZE: "${PHP_POST_MAX_SIZE:-64M}"
       PHP_MAX_EXECUTION_TIME: "${PHP_MAX_EXECUTION_TIME:-120}"
+      PHP_DISABLE_FUNCTIONS: "${PHP_DISABLE_FUNCTIONS:-exec,passthru,shell_exec,system,proc_open,popen}"
       PHP_OPCACHE_MEMORY_CONSUMPTION: "${PHP_OPCACHE_MEMORY_CONSUMPTION:-256}"
       PHP_OPCACHE_INTERNED_STRINGS_BUFFER: "${PHP_OPCACHE_INTERNED_STRINGS_BUFFER:-32}"
       PHP_OPCACHE_MAX_ACCELERATED_FILES: "${PHP_OPCACHE_MAX_ACCELERATED_FILES:-20000}"
@@ -55,10 +67,10 @@ services:
       - "${HTTPS_PORT:-443}:443/tcp"
       - "${HTTPS_PORT:-443}:443/udp"
     volumes:
-      - wsc-public:/app/public
+      - wsc-public:/app/public:rw
       - wsc-secrets:/run/wsc-secrets:ro
-      - caddy-data:/data
-      - caddy-config:/config
+      - caddy-data:/data:rw
+      - caddy-config:/config:rw
     depends_on:
       credential-init:
         condition: service_completed_successfully
@@ -76,6 +88,11 @@ services:
   db:
     image: mariadb:lts
     restart: unless-stopped
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=256m
     environment:
       MARIADB_DATABASE_FILE: "/run/wsc-secrets/db-name"
       MARIADB_USER_FILE: "/run/wsc-secrets/db-user"

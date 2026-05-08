@@ -11,11 +11,11 @@ This image is intentionally small in scope:
 
 ## Supported Images
 
-| WoltLab Suite | PHP | Default WSC Patch | Tag |
-| --- | --- | --- | --- |
-| 6.2 | 8.4 | 6.2.3 | `6.2-php8.4` |
-| 6.1 | 8.3 | 6.1.19 | `6.1-php8.3` |
-| 6.0 | 8.3 | 6.0.25 | `6.0-php8.3` |
+| WoltLab Suite | PHP | Default WSC Patch | Tag          |
+|---------------|-----|-------------------|--------------|
+| 6.2           | 8.4 | 6.2.3             | `6.2-php8.4` |
+| 6.1           | 8.3 | 6.1.19            | `6.1-php8.3` |
+| 6.0           | 8.3 | 6.0.25            | `6.0-php8.3` |
 
 The WoltLab patch version is a build argument and runtime download variable, so newer patch releases do not require a Dockerfile change.
 
@@ -63,11 +63,11 @@ ghcr.io/softcreatrmedia/frankenphp-woltlab-suite
 
 Available tags:
 
-| WoltLab Suite | PHP | Tags |
-| --- | --- | --- |
-| 6.2 | 8.4 | `6.2-php8.4`, `6.2.3-php8.4` |
-| 6.1 | 8.3 | `6.1-php8.3`, `6.1.19-php8.3` |
-| 6.0 | 8.3 | `6.0-php8.3`, `6.0.25-php8.3` |
+| WoltLab Suite | PHP | Tags                          |
+|---------------|-----|-------------------------------|
+| 6.2           | 8.4 | `6.2-php8.4`, `6.2.3-php8.4`  |
+| 6.1           | 8.3 | `6.1-php8.3`, `6.1.19-php8.3` |
+| 6.0           | 8.3 | `6.0-php8.3`, `6.0.25-php8.3` |
 
 Use `compose.prebuilt.yaml` to disable local builds and pull from GHCR:
 
@@ -75,22 +75,6 @@ Use `compose.prebuilt.yaml` to disable local builds and pull from GHCR:
 cp .env.example .env
 docker compose -f compose.yaml -f compose.prebuilt.yaml pull
 docker compose -f compose.yaml -f compose.prebuilt.yaml up -d
-```
-
-For the production hardening overlay:
-
-```sh
-docker compose \
-  -f compose.yaml \
-  -f compose.prebuilt.yaml \
-  -f compose.production.yaml \
-  pull
-
-docker compose \
-  -f compose.yaml \
-  -f compose.prebuilt.yaml \
-  -f compose.production.yaml \
-  up -d
 ```
 
 Select a different prebuilt variant by changing `WSC_TAG` in `.env`:
@@ -132,47 +116,44 @@ docker buildx bake wsc61_php83
 
 Common environment variables:
 
-| Variable | Default | Purpose |
-| --- | --- | --- |
-| `SERVER_NAME` | `localhost` | Caddy site address. Use your domain in production. |
-| `WSC_REF` | `6.2.3` | WoltLab/WCF tag or branch used when building the installer. |
-| `WCFSETUP_DBHOST` | `db` | Database host passed to the WoltLab installer. |
-| `WCFSETUP_DBNAME_FILE` | `/run/wsc-secrets/db-name` | File containing the database name for the WoltLab installer. |
-| `WCFSETUP_DBUSER_FILE` | `/run/wsc-secrets/db-user` | File containing the database user for the WoltLab installer. |
-| `WCFSETUP_DBPASSWORD_FILE` | `/run/wsc-secrets/db-password` | File containing the database password for the WoltLab installer. |
-| `MYSQL_INNODB_BUFFER_POOL_SIZE` | `1G` | MariaDB InnoDB buffer pool size. Lower this only on very small servers. |
-| `PHP_MEMORY_LIMIT` | `512M` | PHP memory limit. |
-| `PHP_UPLOAD_MAX_FILESIZE` | `64M` | Maximum upload file size. |
-| `PHP_POST_MAX_SIZE` | `64M` | Maximum POST body size. |
-| `PHP_OPCACHE_VALIDATE_TIMESTAMPS` | `0` | Disable timestamp checks for production performance. Restart `wsc` after package updates that change PHP files. |
-| `PHP_OPCACHE_MEMORY_CONSUMPTION` | `256` | OPcache shared memory size in MB. |
-| `PHP_OPCACHE_MAX_ACCELERATED_FILES` | `20000` | Maximum number of cached PHP files. |
-| `FRANKENPHP_NUM_THREADS` | `1` | FrankenPHP PHP thread count. Keep this at `1` unless you have tested installation, package updates, and style rebuilds with a higher value. |
-| `FRANKENPHP_MAX_THREADS` | `1` | FrankenPHP maximum PHP thread count. Keep this aligned with `FRANKENPHP_NUM_THREADS` by default. |
-| `FRANKENPHP_CONFIG` | empty | Extra FrankenPHP global config. |
-| `CADDY_GLOBAL_OPTIONS` | empty | Extra Caddy global options. |
-| `CADDY_SERVER_EXTRA_DIRECTIVES` | empty | Extra Caddy site directives, for example a custom `tls` directive. |
-| `CERTBOT_CERT_NAME` | empty | Certificate directory name below `/etc/letsencrypt/live` when using `compose.certbot.yaml`. |
-| `MYSQL_MAX_CONNECTIONS` | `300` | MariaDB connection limit. |
-| `MYSQL_TABLE_OPEN_CACHE` | `4000` | MariaDB table cache size. |
-| `MYSQL_THREAD_CACHE_SIZE` | `64` | MariaDB thread cache size. |
+| Variable                            | Default                                           | Purpose                                                                                                                                     |
+|-------------------------------------|---------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `SERVER_NAME`                       | `localhost`                                       | Caddy site address. Use your domain in production.                                                                                          |
+| `WSC_REF`                           | `6.2.3`                                           | WoltLab/WCF tag or branch used when building the installer.                                                                                 |
+| `WCFSETUP_DBHOST`                   | `db`                                              | Database host passed to the WoltLab installer.                                                                                              |
+| `WCFSETUP_DBNAME_FILE`              | `/run/wsc-secrets/db-name`                        | File containing the database name for the WoltLab installer.                                                                                |
+| `WCFSETUP_DBUSER_FILE`              | `/run/wsc-secrets/db-user`                        | File containing the database user for the WoltLab installer.                                                                                |
+| `WCFSETUP_DBPASSWORD_FILE`          | `/run/wsc-secrets/db-password`                    | File containing the database password for the WoltLab installer.                                                                            |
+| `MYSQL_INNODB_BUFFER_POOL_SIZE`     | `1G`                                              | MariaDB InnoDB buffer pool size. Lower this only on very small servers.                                                                     |
+| `PHP_MEMORY_LIMIT`                  | `512M`                                            | PHP memory limit.                                                                                                                           |
+| `PHP_UPLOAD_MAX_FILESIZE`           | `64M`                                             | Maximum upload file size.                                                                                                                   |
+| `PHP_POST_MAX_SIZE`                 | `64M`                                             | Maximum POST body size.                                                                                                                     |
+| `PHP_DISABLE_FUNCTIONS`             | `exec,passthru,shell_exec,system,proc_open,popen` | PHP functions disabled by default to reduce command-execution risk. Set to an empty value only if a trusted plugin requires one of them.    |
+| `PHP_OPCACHE_VALIDATE_TIMESTAMPS`   | `0`                                               | Disable timestamp checks for production performance. Restart `wsc` after package updates that change PHP files.                             |
+| `PHP_OPCACHE_MEMORY_CONSUMPTION`    | `256`                                             | OPcache shared memory size in MB.                                                                                                           |
+| `PHP_OPCACHE_MAX_ACCELERATED_FILES` | `20000`                                           | Maximum number of cached PHP files.                                                                                                         |
+| `FRANKENPHP_NUM_THREADS`            | `1`                                               | FrankenPHP PHP thread count. Keep this at `1` unless you have tested installation, package updates, and style rebuilds with a higher value. |
+| `FRANKENPHP_MAX_THREADS`            | `1`                                               | FrankenPHP maximum PHP thread count. Keep this aligned with `FRANKENPHP_NUM_THREADS` by default.                                            |
+| `FRANKENPHP_CONFIG`                 | empty                                             | Extra FrankenPHP global config.                                                                                                             |
+| `CADDY_GLOBAL_OPTIONS`              | empty                                             | Extra Caddy global options.                                                                                                                 |
+| `CADDY_SERVER_EXTRA_DIRECTIVES`     | empty                                             | Extra Caddy site directives, for example a custom `tls` directive.                                                                          |
+| `CERTBOT_CERT_NAME`                 | empty                                             | Certificate directory name below `/etc/letsencrypt/live` when using `compose.certbot.yaml`.                                                 |
+| `MYSQL_MAX_CONNECTIONS`             | `300`                                             | MariaDB connection limit.                                                                                                                   |
+| `MYSQL_TABLE_OPEN_CACHE`            | `4000`                                            | MariaDB table cache size.                                                                                                                   |
+| `MYSQL_THREAD_CACHE_SIZE`           | `64`                                              | MariaDB thread cache size.                                                                                                                  |
 
 The application volume is `/app/public`. The image builds a WoltLab installer from the selected `WoltLab/WCF` GitHub tag or branch and stores it in `/usr/src/woltlab`. If `/app/public` is empty, the entrypoint copies that prebuilt installer into the volume.
 
-## Production Compose Overlay
+## Hardened Runtime
 
-For a stricter runtime profile:
+The default compose file runs the application container with a hardened profile:
 
-```sh
-docker compose -f compose.yaml -f compose.production.yaml up -d
-```
-
-The production overlay makes the application container read-only except for:
-
-- `/app/public`
-- `/data`
-- `/config`
-- `/tmp`
+- non-root `www-data` user
+- read-only root filesystem
+- `no-new-privileges`
+- all Linux capabilities dropped except `NET_BIND_SERVICE`
+- tmpfs-backed `/tmp` with `noexec,nosuid`
+- writable mounts only for `/app/public`, `/data`, and `/config`
 
 ### SSL / Certbot Certificate
 
@@ -184,7 +165,7 @@ To request a new certificate on the host, stop anything that is using ports 80 o
 apt-get update
 apt-get install -y certbot
 
-docker compose -f compose.yaml -f compose.production.yaml down
+docker compose -f compose.yaml down
 certbot certonly --standalone -d example.com
 ```
 
@@ -197,13 +178,13 @@ CADDY_SERVER_EXTRA_DIRECTIVES=tls /certs/fullchain.pem /certs/privkey.pem
 ```
 
 ```sh
-docker compose -f compose.yaml -f compose.production.yaml -f compose.certbot.yaml up -d --build
+docker compose -f compose.yaml -f compose.certbot.yaml up -d --build
 ```
 
 When using GHCR images, include `compose.prebuilt.yaml` and omit `--build`:
 
 ```sh
-docker compose -f compose.yaml -f compose.prebuilt.yaml -f compose.production.yaml -f compose.certbot.yaml up -d
+docker compose -f compose.yaml -f compose.prebuilt.yaml -f compose.certbot.yaml up -d
 ```
 
 For an IP address certificate, set both `SERVER_NAME` and `CERTBOT_CERT_NAME` to the IP address. Set `CADDY_GLOBAL_OPTIONS` to `default_sni <ip-address>` as well, because many clients omit SNI when connecting directly to an IP address.
@@ -211,8 +192,8 @@ For an IP address certificate, set both `SERVER_NAME` and `CERTBOT_CERT_NAME` to
 After Certbot renews a host-managed certificate, refresh the Docker copy and restart Caddy:
 
 ```sh
-docker compose -f compose.yaml -f compose.production.yaml -f compose.certbot.yaml run --rm certbot-cert-init
-docker compose -f compose.yaml -f compose.production.yaml -f compose.certbot.yaml restart wsc
+docker compose -f compose.yaml -f compose.certbot.yaml run --rm certbot-cert-init
+docker compose -f compose.yaml -f compose.certbot.yaml restart wsc
 ```
 
 ## HTTP/3
@@ -285,7 +266,7 @@ scripts/restore.sh backups/<timestamp>
 If you restore a deployment that uses additional compose overlays, pass the same compose files through `COMPOSE_ARGS`:
 
 ```sh
-COMPOSE_ARGS="-f compose.yaml -f compose.production.yaml -f compose.certbot.yaml" \
+COMPOSE_ARGS="-f compose.yaml -f compose.certbot.yaml" \
 scripts/restore.sh backups/<timestamp>
 ```
 
