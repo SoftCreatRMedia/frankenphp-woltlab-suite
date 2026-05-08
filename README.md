@@ -147,6 +147,8 @@ Common environment variables:
 | `PHP_OPCACHE_VALIDATE_TIMESTAMPS` | `0` | Disable timestamp checks for production performance. Restart `wsc` after package updates that change PHP files. |
 | `PHP_OPCACHE_MEMORY_CONSUMPTION` | `256` | OPcache shared memory size in MB. |
 | `PHP_OPCACHE_MAX_ACCELERATED_FILES` | `20000` | Maximum number of cached PHP files. |
+| `FRANKENPHP_NUM_THREADS` | `1` | FrankenPHP PHP thread count. Keep this at `1` unless you have tested installation, package updates, and style rebuilds with a higher value. |
+| `FRANKENPHP_MAX_THREADS` | `1` | FrankenPHP maximum PHP thread count. Keep this aligned with `FRANKENPHP_NUM_THREADS` by default. |
 | `FRANKENPHP_CONFIG` | empty | Extra FrankenPHP global config. |
 | `CADDY_GLOBAL_OPTIONS` | empty | Extra Caddy global options. |
 | `CADDY_SERVER_EXTRA_DIRECTIVES` | empty | Extra Caddy site directives, for example a custom `tls` directive. |

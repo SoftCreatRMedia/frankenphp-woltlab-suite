@@ -2,6 +2,8 @@
 	{$CADDY_GLOBAL_OPTIONS}
 
 	frankenphp {
+		num_threads {$FRANKENPHP_NUM_THREADS:1}
+		max_threads {$FRANKENPHP_MAX_THREADS:1}
 		{$FRANKENPHP_CONFIG}
 	}
 
