@@ -59,13 +59,13 @@
 			path_regexp woltlabApp ^/([^/]+)/(.*)$
 			file /{re.woltlabApp.1}/index.php
 		}
-		rewrite @woltlabAppRewrite /{re.woltlabApp.1}/index.php?{re.woltlabApp.2}
+		rewrite @woltlabAppRewrite /{re.woltlabApp.1}/index.php?__rewrittenPath={re.woltlabApp.2}&{query}
 
 		@woltlabRootRewrite {
 			not file {path} {path}/
 			path_regexp woltlabRoot ^/(.*)$
 		}
-		rewrite @woltlabRootRewrite /index.php?{re.woltlabRoot.1}
+		rewrite @woltlabRootRewrite /index.php?__rewrittenPath={re.woltlabRoot.1}&{query}
 
 		php_server
 	}
