@@ -2,7 +2,14 @@
 
 This guide mirrors the Docker image defaults for administrators who want to install WoltLab Suite Core directly on a server.
 
-It assumes Debian 13, or Ubuntu 24.04 (other distros or versions might work as well), FrankenPHP with Caddy, MariaDB, PHP 8.4 for WSC 6.2, and a public DNS name. IP-address certificates work when your CA supports them, but a normal DNS name is simpler and better supported.
+It assumes Debian 13 or Ubuntu 24.04, FrankenPHP 1.13.2 or later with Caddy,
+MariaDB, PHP 8.4.27 or later within 8.4 for WSC 6.2, and a public DNS name.
+Other distributions or versions may also work. Check the PHP version
+reported by `frankenphp version` before starting the service.
+[FrankenPHP security release](https://github.com/php/frankenphp/releases/tag/v1.13.2)
+
+IP-address certificates work when your CA supports them. A DNS name is
+simpler and better supported.
 
 The `manual/` directory is documentation only. It is excluded from the Docker build context and is not included in the Docker image.
 
@@ -63,6 +70,11 @@ zip
 ```
 
 ## PHP Runtime
+
+For an existing installation, update the FrankenPHP binary used by your
+systemd service through your package provider or installation method. Confirm
+the binary's PHP version, then validate the Caddy configuration and restart
+the service as shown in the [Caddy configuration section](#caddy-configuration).
 
 Create `/etc/php/woltlab.ini`:
 

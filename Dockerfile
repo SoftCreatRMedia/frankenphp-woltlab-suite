@@ -24,7 +24,8 @@ RUN set -eux; \
     chmod +x /usr/local/bin/build-wsc-installer; \
     build-wsc-installer "$WSC_REF" /usr/src/woltlab
 
-FROM dunglas/frankenphp:1-php${PHP_VERSION}-${DEBIAN_VERSION}
+# FrankenPHP 1.13.2 and newer ship PHP with both PHP2Shell fixes.
+FROM dunglas/frankenphp:1.13.5-php${PHP_VERSION}-${DEBIAN_VERSION}
 
 ARG WSC_REF
 
@@ -49,7 +50,10 @@ ENV WSC_REF="${WSC_REF}" \
     FRANKENPHP_MAX_THREADS="1" \
     FRANKENPHP_CONFIG=""
 
+COPY docker/check-wsc-php-version.sh /usr/local/bin/check-wsc-php-version
+
 RUN set -eux; \
+    sh /usr/local/bin/check-wsc-php-version "$WSC_REF"; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         ca-certificates \

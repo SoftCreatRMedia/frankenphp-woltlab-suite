@@ -1,6 +1,8 @@
 #!/bin/sh
 set -eu
 
+sh /usr/local/bin/check-wsc-php-version "${WSC_REF:-}"
+
 public_dir="${WSC_PUBLIC_DIR:-/app/public}"
 source_dir="${WSC_SOURCE_DIR:-/usr/src/woltlab}"
 marker_file="${public_dir}/.wsc-ref"

@@ -13,11 +13,17 @@ This image is intentionally small in scope:
 
 | WoltLab Suite | PHP | Default WSC Patch | Tag          |
 |---------------|-----|-------------------|--------------|
-| 6.2           | 8.4 | 6.2.3             | `6.2-php8.4` |
-| 6.1           | 8.3 | 6.1.19            | `6.1-php8.3` |
-| 6.0           | 8.3 | 6.0.25            | `6.0-php8.3` |
+| 6.2           | 8.4.27 | 6.2.3          | `6.2-php8.4-r2` |
+| 6.1           | 8.3.36 | 6.1.19         | `6.1-php8.3-r2` |
+| 6.0           | 8.3.36 | 6.0.25         | `6.0-php8.3-r2` |
 
-The WoltLab patch version is a build argument and runtime download variable, so newer patch releases do not require a Dockerfile change.
+The Dockerfile uses FrankenPHP 1.13.5 for PHP 8.2, 8.3, 8.4, and 8.5 on Debian
+Bookworm and Trixie. The build and startup checks enforce the
+PHP releases that fix CVE-2026-109618 and CVE-2026-109619.
+For local WoltLab Suite 6.3 builds, set `WSC_REF=6.3` and select PHP 8.4
+(8.4.27 or later) or PHP 8.5 (8.5.12 or later). [FrankenPHP security release](https://github.com/php/frankenphp/releases/tag/v1.13.2)
+
+Set `WSC_REF` to a WoltLab/WCF tag or branch to build a different installer.
 
 ## Manual Setup
 
@@ -61,13 +67,17 @@ Prebuilt multi-architecture images are published to:
 ghcr.io/softcreatrmedia/frankenphp-woltlab-suite
 ```
 
-Available tags:
+The Bake workflow publishes these patched tags:
 
 | WoltLab Suite | PHP | Tags                          |
 |---------------|-----|-------------------------------|
-| 6.2           | 8.4 | `6.2-php8.4`, `6.2.3-php8.4`  |
-| 6.1           | 8.3 | `6.1-php8.3`, `6.1.19-php8.3` |
-| 6.0           | 8.3 | `6.0-php8.3`, `6.0.25-php8.3` |
+| 6.2           | 8.4.27 | `6.2-php8.4-r2`, `6.2.3-php8.4-r2`  |
+| 6.1           | 8.3.36 | `6.1-php8.3-r2`, `6.1.19-php8.3-r2` |
+| 6.0           | 8.3.36 | `6.0-php8.3-r2`, `6.0.25-php8.3-r2` |
+
+The prebuilt Compose overlay appends `-r2` to `WSC_TAG` so existing
+installations select the patched release. Use a local build if the
+corresponding GHCR tag is awaiting publication.
 
 Use `compose.prebuilt.yaml` to disable local builds and pull from GHCR:
 
@@ -269,6 +279,37 @@ If you restore a deployment that uses additional compose overlays, pass the same
 COMPOSE_ARGS="-f compose.yaml -f compose.certbot.yaml" \
 scripts/restore.sh backups/<timestamp>
 ```
+
+## Updating the Docker runtime
+
+Update the checkout in the existing Compose project directory. Keep your
+`.env`, project name, and any overlays such as `compose.certbot.yaml`. These
+commands recreate the application container and reuse the existing volumes.
+
+For a running stack built locally, rebuild the application image and recreate
+the `wsc` service.
+
+```sh
+docker compose up -d --build --no-deps wsc
+```
+
+For a running stack using GHCR, wait until the corresponding `-r2` tag is
+published. Pull it using the updated prebuilt overlay, then recreate `wsc`.
+
+```sh
+docker compose -f compose.yaml -f compose.prebuilt.yaml pull --policy always wsc &&
+  docker compose -f compose.yaml -f compose.prebuilt.yaml up -d --no-deps wsc
+```
+
+Use the same Compose files and project name when checking the updated runtime.
+
+```sh
+docker compose exec -T wsc frankenphp version
+```
+
+Expect PHP 8.4.27 or later within 8.4 for the 6.2 image, or PHP 8.3.36 or
+later within 8.3 for the 6.0 and 6.1 images. Local WSC 6.3 builds require
+PHP 8.4.27 or later within 8.4, or PHP 8.5.12 or later within 8.5.
 
 ## Updating WoltLab
 

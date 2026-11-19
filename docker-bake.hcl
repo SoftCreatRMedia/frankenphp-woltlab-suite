@@ -21,6 +21,8 @@ target "wsc62_php84" {
   tags = [
     "${IMAGE}:6.2-php8.4",
     "${IMAGE}:6.2.3-php8.4",
+    "${IMAGE}:6.2-php8.4-r2",
+    "${IMAGE}:6.2.3-php8.4-r2",
   ]
   args = {
     PHP_VERSION = "8.4"
@@ -34,6 +36,8 @@ target "wsc61_php83" {
   tags = [
     "${IMAGE}:6.1-php8.3",
     "${IMAGE}:6.1.19-php8.3",
+    "${IMAGE}:6.1-php8.3-r2",
+    "${IMAGE}:6.1.19-php8.3-r2",
   ]
   args = {
     PHP_VERSION = "8.3"
@@ -47,6 +51,8 @@ target "wsc60_php83" {
   tags = [
     "${IMAGE}:6.0-php8.3",
     "${IMAGE}:6.0.25-php8.3",
+    "${IMAGE}:6.0-php8.3-r2",
+    "${IMAGE}:6.0.25-php8.3-r2",
   ]
   args = {
     PHP_VERSION = "8.3"
